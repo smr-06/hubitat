@@ -40,6 +40,8 @@
  *    (3) Changed button handling as per changes to GE dimmer driver by stephack
  *    (4) Fixed physical and digital event handling.
  *
+ * smr 2019-01-12
+ *    (1) Added isStateChange:true to physical and digital event generation, to create events regardless of state change
  */
 metadata {
 	definition (name: "GE/Jasco Z-Wave Plus On/Off Switch", namespace: "nuttytree", author: "Chris Nussbaum") {
@@ -120,7 +122,8 @@ def zwaveEvent(hubitat.zwave.commands.crc16encapv1.Crc16Encap cmd) {
 
 def zwaveEvent(hubitat.zwave.commands.basicv1.BasicReport cmd) {
     log.debug "---BASIC REPORT V1--- ${device.displayName} sent ${cmd}"
-	createEvent(name: "switch", value: cmd.value ? "on" : "off", type: "digital")
+	// createEvent(name: "switch", value: cmd.value ? "on" : "off", type: "digital")
+	createEvent(name: "switch", value: cmd.value ? "on" : "off", isStateChange: true, type: "digital")
 }
 
 def zwaveEvent(hubitat.zwave.commands.basicv1.BasicSet cmd) {
@@ -169,7 +172,8 @@ def zwaveEvent(hubitat.zwave.commands.configurationv2.ConfigurationReport cmd) {
 
 def zwaveEvent(hubitat.zwave.commands.switchbinaryv1.SwitchBinaryReport cmd) {
     log.debug "---BINARY SWITCH REPORT V1--- ${device.displayName} sent ${cmd}"
-    createEvent(name: "switch", value: cmd.value ? "on" : "off", type: "physical")
+    // createEvent(name: "switch", value: cmd.value ? "on" : "off", type: "physical")
+	createEvent(name: "switch", value: cmd.value ? "on" : "off", isStateChange: true, type: "physical")
 }
 
 def zwaveEvent(hubitat.zwave.commands.manufacturerspecificv2.ManufacturerSpecificReport cmd) {
